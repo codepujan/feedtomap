@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <style>
+       #map {
+         min-height:500px;
+        width: 100%;
+       }
+    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MapMyNews</title>
+
+  <!-- Bootstrap core CSS -->
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/animate.min.css" rel="stylesheet">
+
+  <!-- Custom styling plus plugins -->
+  <link href="css/custom.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/maps/jquery-jvectormap-2.0.3.css" />
+  <link href="css/icheck/flat/green.css" rel="stylesheet" />
+  <link href="css/floatexamples.css" rel="stylesheet" type="text/css" />
+  
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/nprogress.js"></script>
+  <script src="js/constants.js"></script>
+  
+  <!-- Scrolling Nav JavaScript -->
+   <script src="js/jquery.easing.min.js"></script>
+   <script src="js/scrolling-nav.js"></script>
+   
+ 
+ 
+
+  <!--[if lt IE 9]>
+        <script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <![endif]-->
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+</head>
+
+
+<body class="nav-md">
+
+  <div class="container body">
+
+
+    <div class="main_container">
+
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="index.html" class="site_title"><i class="fa fa-area-chart"></i> <span>MapMyNews</span></a>
+          </div>
+          <div class="clearfix"></div>
+
+
+          <!-- menu prile quick info -->
+          
+          <!-- /menu prile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+
+            <div class="menu_section">
+             <h4></h4>
+              <ul class="nav side-menu">
+                <li><a href="index.html"><i class="fa fa-book"></i>NYTimes</a>
+                 
+                </li>
+                <li><a id="date"><i class="fa fa-calendar"></i>Date Ranges</a>
+                  
+                </li>
+                <li><a href="analytics.html"><i class="fa fa-line-chart"></i>Data Analytics</a>
+                
+               
+                </li>
+				
+                   
+                    
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            
+
+          </div>
+          <!-- /sidebar menu -->
+
+               
+          <!-- /menu footer buttons -->
+          <!-- /menu footer buttons -->
+          
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+
+        <div class="nav_menu">
+          <nav class="" role="navigation">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+              <br>
+
+              
+
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main" id="mainContainer">
+        
+        
+<div id="map">
+		</div>
+		 <div class="modal fade openinfo" data-target="#infomodal" id="infomodal" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="info_title"></h4>
+                      </div>
+                      <div class="modal-body">
+                        <h4>Snippet</h4>
+                        <p id="info_snippet"></p>
+						<br>
+						
+				<!--		<h4>Media</h4>
+						<center>
+        <img src="https://static01.nyt.com/images/2016/10/23/books/review/23Wrong/23Wrong-superJumbo.jpg" id="info_media" width=400px height=200px></img>
+        </center>
+        -->
+                      <br>
+                      <a href="https://www.google.com" id="info_full">For Full Story , Click here</a>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary left" onclick="decreaseIndex()"> < Prev</button>
+                        
+                          
+                            <button type="button" class="btn btn-success" id="info_sentiment">...</button>
+                       
+
+                        <button type="button" class="btn btn-primary right" onclick="increaseIndex()">Next ></button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                
+           <div class="modal fade openinfo" data-target="#datemodal" id="datemodal" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="info_title">Date Ranges for the News Feed</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+                       <div class="x_title">
+              
+			  
+			   <div class="col-md-3 col-sm-3 col-xs-3">
+			 <h4 class="centertext">Start Date</h4>
+			 </div>
+			   
+			    <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+								  
+									
+				<input type="text" id="startDate" class="datepicker form-control has-feedback-right">
+			
+					<span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>								
+	  
+				  </div>
+								  
+				<div class="col-md-3 col-sm-3 col-xs-3">
+				
+				<h4 class="centertext"> End Date </h4>
+				</div>
+				
+				 <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+				
+			
+				<input type="text" id="endDate" class="datepicker form-control has-feedback-right">
+				<span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>								
+  
+			  </div>
+			  
+			  
+					
+                <div class="clearfix"></div>
+              </div>
+								  
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="dateConfirm" onclick="">OK</button>
+                      </div>
+                  </div>
+                  </div>
+                  </div>
+                      
+                
+  
+		</div>
+			</div>
+		</div>
+		
+	  
+ 
+      
+      </div>
+	  <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Back to Top" data-toggle="tooltip" data-placement="top">
+  <span class="glyphicon glyphicon-chevron-up"></span>
+</a>
+	  </div>
+	  
+      <!-- /page content -->
+ 
+    <link rel="stylesheet" href="css/jquerydateui.css">
+   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  
+
+  <script src="js/bootstrap.min.js"></script>
+
+  
+	<!-- bootstrap progress js -->
+  <script src="js/progressbar/bootstrap-progressbar.min.js"></script>
+    
+   <script src="js/datepicker/daterangepicker.js"></script>
+
+  <script src="js/custom.js"></script>
+
+  
+
+ 
+   
+<!-- chart js -->
+ <script src="js/chartjs/dist/Chart.bundle.js">
+//Custom Label Fun Part  
+</script>
+<script>
+  var geocoder;
+  var map;
+  var activedataNode;
+  var markers=[]
+  var stopDownloadflag=false
+  var today=new Date()
+  var globalCityIndex=0
+    var endingDate= today.toISOString().slice(0,10).replace(/-/g,"");
+
+  today.setDate(today.getDate()-5) //subtract d to 5 days before me 
+  var startingDate= today.toISOString().slice(0,10).replace(/-/g,"");
+  var locations=[
+'New York City',
+'Los Angeles',
+'Chicago',
+'Houston',
+'Phoenix',
+'Toronto',
+'San Francisco',
+'Waterloo',
+'Buenos Aires',
+'Rio de Janerio',
+'Istanbul',
+'Moscow',
+'London',
+'Berlin',
+'Paris',
+'Milan',
+'Brussels',
+'Tokyo',
+'Shanghai',
+'Beijing',
+'Mumbai',
+'Delhi',
+'Seoul',
+'Dhaka',
+'Tehran',
+'Bangkok',
+'Taipei',
+'Lagos',
+'Cairo',
+'Cape Town',
+'Nairobi',
+'Sydney',
+'Melbourne',
+'Perth'
+]
+
+
+/**var locations=[
+  'New York City',
+  'Los Angeles']
+  **/
+
+var flickeringColors=[
+  'EC0909',
+  '80d926',
+  '00bfff',
+  'FFA500',
+  'DA1AA2'
+  ]
+
+
+
+function dataRanges(){
+  
+  $('#datemodal').modal('show');
+}    
+  
+$('#date').click (function() {  
+  
+dataRanges();
+
+});
+
+$(function() {
+ $('.datepicker').datepicker({
+			dateFormat: 'yymmdd'
+	});
+ 
+  });
+  
+  
+  $('#dateConfirm').click(function() {
+    
+    startingDate= $('#startDate').val();
+    endingDate = $('#endDate').val();
+    $('#datemodal').modal('hide');
+    rerenderData()
+    
+  });
+  
+var currentDataIndex=0;
+
+
+function rerenderData(startDate,endDate){
+  globalCityIndex=0
+  stopDownloadflag=true
+  for(var i=0;i<markers.length;i++)
+  markers[i].setMap(null)
+  
+   downloadDataFromWeb(locations[globalCityIndex],globalCityIndex)
+
+  
+}
+function increaseIndex(){
+  if(currentDataIndex+1>=activedataNode.length)
+{
+  console.log("Returnnn From Here")
+  return
+}
+  currentDataIndex++
+updateModalData(currentDataIndex)
+}
+function decreaseIndex(){
+  if(currentDataIndex-1<0)
+{
+  console.log("Returnnn From here")
+  return
+}
+  currentDataIndex--;
+  
+updateModalData(currentDataIndex)
+  
+}
+      function initMap() {
+     var centerPoint = {lat: 28.363, lng: 20.044};
+         map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: centerPoint
+        });
+   downloadDataFromWeb(locations[globalCityIndex],globalCityIndex)
+           doSomeLabelFun()
+      }
+      
+      function doSomeLabelFun(){
+                var myLatLng = new google.maps.LatLng(point.lat, point.lng);
+                console.log(myLatLng)
+          var myMarker = new google.maps.Marker({
+            map: map,
+            position: myLatLng,
+            label: 'Hello World!',
+            draggable: true
+        });
+        
+        
+      }
+      
+      
+function downloadDataFromWeb(mcityCode,mcityId){
+  if(stopDownloadflag){
+    console.log("Attempting To Pause All the Pending Downloads of Map DAta ");
+    stopDownloadflag=false
+    return
+  }
+  console.log("Working On Index "+mcityId)
+var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+url += '?' + $.param({
+  'api-key': "55b263c78fe54b369613ec9e366fd9bd",
+  'q':mcityCode,
+  'fl': "abstract,web_url,headline,snippet,lead_paragraph,multimedia",
+  'begin_date': startingDate,
+  'end_date': endingDate,
+  'sort': "newest"
+});
+$.ajax({
+  url: url,
+  method: 'GET',
+}).done(function(result) {
+    startParsingData(result.response.docs,mcityCode)
+    if(globalCityIndex+1<locations.length){
+    setTimeout(function() {
+      globalCityIndex=globalCityIndex+1;
+      downloadDataFromWeb(locations[globalCityIndex],globalCityIndex)}, 1000)
+}
+ // setTimeout(),1000)
+  else
+  console.log("Boom !! And Everything is Over ")
+  
+}).fail(function(err) {
+  console.log("Oopsies !! Error "+cityCode)
+  console.log(err)
+  throw err;
+});
+
+}
+
+
+
+function startParsingData(dataNode,cityCode){
+    codeAddress(dataNode,cityCode,dataNode.length)
+}
+
+
+function openNewsDetail(associatedaddress,dataNode){
+  currentDataIndex=0;
+  console.log("Associated Address is "+associatedaddress)
+  console.log(dataNode)
+  activedataNode=dataNode
+  updateModalData(0) //when modal openos , 0 is the index   of the initial data item
+}
+
+function updateModalData(dataIndex){
+  $('#info_title').html(activedataNode[dataIndex].headline.main);
+$('#info_snippet').html(activedataNode[dataIndex].snippet);
+$('#info_abstract').html(activedataNode[dataIndex].lead_paragraph);
+$('#info_full').attr('href',activedataNode[dataIndex].web_url)
+
+//Do The Sentiment Analysis For now 
+if(activedataNode[dataIndex].sentimentData==null)
+calculateTitleSentiments(dataIndex,activedataNode[dataIndex].headline.main) // Can switch between headline.main or the snippet
+else
+{
+  $('#info_sentiment').html(activedataNode[dataIndex].sentimentData.emotion)
+}
+
+}
+function calculateTitleSentiments(operatingIndex,title){
+  
+  var url ="https://access.alchemyapi.com/calls/text/TextGetEmotion"
+url += '?' + $.param({
+  'apikey': "0d48b5ecfeb6b69c069f2ffd09287ec518c1d91c",
+  'text':title,
+  outputMode:'json'
+});
+
+$.ajax({
+  url: url,
+  method: 'GET',
+}).done(function(result) {
+if(operatingIndex==currentDataIndex){
+  var dominatingsentiment=notificationRanker(result.docEmotions)
+    activedataNode[currentDataIndex].sentimentData=dominatingsentiment
+  $("#info_sentiment").html(dominatingsentiment.emotion);
+}else{
+  //Just add the Data at the Data Node : not the current Active Node : So , no need to reflect UI Changes here 
+  var dominatingsentiment=notificationRanker(result.docEmotions)
+  activedataNode[currentDataIndex].sentimentData=dominatingsentiment
+    $("#info_sentiment").html(dominatingsentiment.emotion);
+  console.log(dominatingsentiment.emotion)
+}
+  
+}).fail(function(err) {
+  console.log("Oopsies !! Error ")
+  console.log(err)
+  throw err;
+})
+  
+}
+ function codeAddress(dataNode,addressinWords,numberOfResults) {
+     
+    //.log(dataNode)
+ 
+     var dataCount=numberOfResults>10?'10+':numberOfResults
+      var infowindow = new google.maps.InfoWindow();
+   content= document.createElement('a');
+
+    content.setAttribute('href','#');
+
+    content.appendChild(document.createTextNode(addressinWords+' '+dataCount+' News'));
+    
+    google.maps.event.addDomListener(content,'click',
+                                     function(){
+                                       $('#infomodal').modal('show');
+                                       openNewsDetail(addressinWords,dataNode)
+                                       
+                                     })
+    infowindow.setContent(content);
+
+
+      geocoder = new google.maps.Geocoder();
+    geocoder.geocode( { 'address':addressinWords}, function(results, status) {
+      if (status == 'OK') {
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+           icon:'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|'+flickeringColors[Math.floor(Math.random() * (4 - 0) + 0)]+'|000000',
+            visible: true});
+            markers.push(marker)
+              marker.setMap(map)
+              if(dataCount==0){
+   var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|000000|000000';
+    marker.setIcon(markerUrl)
+}else{
+  //go for the iemotional analysis
+                  mergeTitlesIntoWord(dataNode,marker)
+
+}
+
+               /**setInterval(function() {
+var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' +dataCount +'|'+flickeringColors[Math.floor(Math.random() * (4 - 0) + 0)]+'|000000';
+        marker.setIcon(markerUrl)
+},500)
+**/
+         marker.addListener('click', function() {
+    infowindow.open(map, marker);
+    infowindow.addListener('click',function(){
+        console.log("Okay !! Some Serious Data Displaying to be Done !!")
+    })
+      //Map Based on Emotion API Play For now 
+  });
+
+
+  
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+  
+  function notificationRanker(resultNode){ //resultNode is the docEmotions wala Object 
+    
+    var sentiments=[]
+    sentiments.push({emotion:"Anger",value:resultNode.anger}) 
+    sentiments.push({emotion:"Disgust",value:resultNode.disgust})
+    sentiments.push({emotion:"Fear",value:resultNode.fear})
+    sentiments.push({emotion:"Joy",value:resultNode.joy})
+    sentiments.push({emotion:"Sad",value:resultNode.sadness})
+    console.log("Doing Our Big Data Sort !! ")
+    sentiments.sort(compare)
+    return sentiments[4]
+  }
+  function compare(a,b) {
+  if (a.value< b.value)
+    return -1;
+  if (a.value > b.value)
+    return 1;
+  return 0;
+}
+
+
+function mergeTitlesIntoWord(sourceNode,marker){
+  
+   var bigString=""
+  for(var i=0;i<sourceNode.length;i++){
+    bigString+=sourceNode[i].headline.main
+  }
+  calculateGenericSentiment(bigString,marker)
+}
+
+
+function calculateGenericSentiment(bigtitle,sourceMarker){
+  
+  var url ="https://access.alchemyapi.com/calls/text/TextGetEmotion"
+url += '?' + $.param({
+  'apikey': "0d48b5ecfeb6b69c069f2ffd09287ec518c1d91c",
+  'text':bigtitle,
+  outputMode:'json'
+});
+$.ajax({
+  url: url,
+  method: 'GET',
+}).done(function(result) {
+    var dominatingsentiment=notificationRanker(result.docEmotions)
+  mapSentimentToColor(sourceMarker,dominatingsentiment.emotion);
+}).fail(function(err) {
+  console.log("Oopsies !! Error ")
+  console.log(err)
+  throw err;
+})
+  
+}
+
+
+function mapSentimentToColor(sourceMarker,sentiment){
+ //Anger,Disgust,Fear,Joy,Sad
+ switch (sentiment) {
+   case 'Anger':
+     // code
+     //Red 
+     var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|FF0000|000000';
+       sourceMarker.setIcon(markerUrl)
+
+     break;
+     
+     case 'Disgust':
+       //code
+       //Purple 
+var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|FF00E8|000000';
+  sourceMarker.setIcon(markerUrl)
+
+       break;
+       
+       case 'Fear':
+      //console.log("Map Color "+"Orange")
+      var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|FF5D00|000000';
+        sourceMarker.setIcon(markerUrl)
+
+
+
+         break;
+         
+         case 'Joy':
+                 //console.log("Map Color "+"Green")
+                 var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|08E62A|000000';
+                   sourceMarker.setIcon(markerUrl)
+
+
+
+           break;
+           
+           case 'Sad':
+                  // console.log("Map Color "+"Blue")
+                   var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|086AE6|000000';
+                     sourceMarker.setIcon(markerUrl)
+
+
+
+             break;
+   
+   default:
+   console.log("Map Color "+"Silver")
+   var markerUrl='http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+'|000000|000000';
+    sourceMarker.setIcon(markerUrl)
+  break;
+  
+     // code
+ } 
+}
+
+
+</script>
+
+
+ <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtP-yPXvls7KXyrqXzgIeKRIT-Wbp7Rao&callback=initMap">
+    </script>
+ 
+<!-- Back to Top -->
+  <script type="text/javascript">
+  
+	$(document).ready(function(){
+     $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $('#back-to-top').fadeIn();
+            } else {
+                $('#back-to-top').fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        $('#back-to-top').click(function () {
+            $('#back-to-top').tooltip('hide');
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+        
+        $('#back-to-top').tooltip('show');
+
+});
+
+$(document).ready(function()
+{
+ /** $('#fromDate').datepicker();
+  $('#toDate').datepicker();
+  **/
+  
+  $('#infomodal').modal({ show: false});
+  $('#datemodal').modal({show: false});
+  	
+
+});  
+
+</script>
+
+
+<!-- Page Scroll --> 
+
+  
+  </body>
+
+</html>
